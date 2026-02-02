@@ -31,7 +31,7 @@ export function Hero() {
       </motion.div>
 
       {/* Headline with custom animation */}
-      <h1 className="whitespace-nowrap">
+      <h1 className="md:whitespace-nowrap">
         <motion.span
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -42,7 +42,7 @@ export function Hero() {
         </motion.span>{' '}
         <motion.span
           initial={{ opacity: 0, y: -50, rotate: 0 }}
-          animate={{ opacity: 1, y: 0, rotate: -5 }}
+          animate={{ opacity: 1, y: 0, rotate: -2 }}
           transition={{
             duration: 0.25,
             delay: 0.5,
@@ -50,7 +50,7 @@ export function Hero() {
           }}
           onHoverStart={() => setIsHovered(true)}
           onHoverEnd={() => setIsHovered(false)}
-          className="relative inline-block cursor-pointer rounded bg-accent px-2 py-0.5 text-white transition-transform hover:scale-105"
+          className="relative mt-2 block w-fit cursor-pointer rounded bg-accent px-2 py-0.5 text-white transition-transform hover:scale-105 md:mt-0 md:inline-block"
         >
           build it.
           <AnimatePresence>
