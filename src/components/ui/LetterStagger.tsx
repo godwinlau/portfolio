@@ -66,7 +66,7 @@ export function LetterStagger({
         {segments.map((segment, segIndex) => (
           <span
             key={segIndex}
-            className={segment.highlight ? 'text-accent' : ''}
+            className={segment.highlight ? 'inline-block -rotate-2 rounded bg-accent px-2 py-0.5 text-white' : ''}
           >
             {segment.text}
           </span>
@@ -86,7 +86,7 @@ export function LetterStagger({
         {segments.map((segment, segIndex) => (
           <span
             key={segIndex}
-            className={segment.highlight ? 'text-accent' : ''}
+            className={segment.highlight ? 'inline-block -rotate-2 rounded bg-accent px-2 py-0.5 text-white' : ''}
           >
             {segment.text.split('').map((char, charIndex) => (
               <motion.span

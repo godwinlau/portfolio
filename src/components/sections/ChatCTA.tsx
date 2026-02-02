@@ -3,7 +3,8 @@
 import { motion, useInView } from 'framer-motion';
 import Image from 'next/image';
 import { useRef, useState, useEffect } from 'react';
-import { ChatCircle, EnvelopeSimple } from '@phosphor-icons/react';
+import { ChatCircle } from '@phosphor-icons/react';
+import { ArrowLink } from '@/components/ui';
 
 const messages = [
   {
@@ -176,7 +177,7 @@ export function ChatCTA() {
             transition={{ duration: 0.4 }}
             className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-bubble"
           >
-            <ChatCircle size={24} weight="bold" className="text-muted" />
+            <ChatCircle size={24} weight="bold" className="text-accent" />
           </motion.div>
 
           {/* Heading */}
@@ -184,9 +185,9 @@ export function ChatCTA() {
             initial={{ opacity: 0, y: 20 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.4, delay: 0.1 }}
-            className="mb-10 text-2xl md:text-3xl"
+            className="mb-10 text-center text-2xl md:text-3xl"
           >
-            Let's continue the <span className="text-accent">convo!</span>
+            Let's continue the <span className="inline-block -rotate-2 rounded bg-accent px-2 py-0.5 text-white">convo!</span>
           </motion.h2>
 
           {/* Chat messages */}
@@ -207,16 +208,15 @@ export function ChatCTA() {
           </div>
 
           {/* CTA Button */}
-          <motion.a
-            href="mailto:hello@godwinlaureto.com"
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={showCTA ? { opacity: 1, y: 0 } : {}}
             transition={{ duration: 0.4, ease: 'easeOut' }}
-            className="inline-flex items-center gap-2 rounded-full bg-accent px-6 py-3 text-sm font-medium text-white transition-all hover:bg-accent/90 hover:scale-105"
           >
-            <EnvelopeSimple size={18} weight="bold" />
-            hello@godwinlaureto.com
-          </motion.a>
+            <ArrowLink href="mailto:hello@godwinlaureto.com" variant="pill-light" external>
+              hello@godwinlaureto.com
+            </ArrowLink>
+          </motion.div>
         </div>
       </div>
     </section>

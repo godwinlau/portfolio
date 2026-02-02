@@ -33,7 +33,7 @@ export function StackGrid() {
               <p className="mb-4 text-sm font-medium uppercase tracking-wide text-muted">
                 {category.title}
               </p>
-              <ul className="flex flex-col gap-3">
+              <ul className="grid grid-cols-2 gap-3">
                 {category.items.map((skill) => (
                   <li
                     key={skill}
