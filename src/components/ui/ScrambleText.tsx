@@ -24,7 +24,7 @@ export function ScrambleText({
   const [displayText, setDisplayText] = useState('');
   const [isMounted, setIsMounted] = useState(false);
   const elementRef = useRef<HTMLElement>(null);
-  const frameRef = useRef<number>();
+  const frameRef = useRef<number | undefined>(undefined);
   const startTimeRef = useRef<number | null>(null);
 
   useEffect(() => {

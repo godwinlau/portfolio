@@ -22,8 +22,8 @@ export function useScrambleText(
 
   const [displayText, setDisplayText] = useState('');
   const [isComplete, setIsComplete] = useState(false);
-  const frameRef = useRef<number>();
-  const startTimeRef = useRef<number>();
+  const frameRef = useRef<number | undefined>(undefined);
+  const startTimeRef = useRef<number | undefined>(undefined);
 
   useEffect(() => {
     const finalText = text;
