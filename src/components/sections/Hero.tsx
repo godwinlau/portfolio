@@ -31,7 +31,7 @@ export function Hero() {
       </motion.div>
 
       {/* Headline with custom animation */}
-      <h1 className="md:whitespace-nowrap">
+      <h1 className="leading-[0.85] md:whitespace-nowrap md:leading-normal">
         <motion.span
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -91,7 +91,46 @@ export function Hero() {
           {email}
         </ContactButton>
 
-        {/* Scribble annotation */}
+        {/* Scribble annotation - Mobile */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 1.6 }}
+          className="flex items-center gap-2 md:hidden"
+        >
+          {/* Hand-drawn arrow pointing left towards button */}
+          <svg
+            width="24"
+            height="20"
+            viewBox="0 0 24 20"
+            fill="none"
+            className="text-muted"
+          >
+            {/* Curved line */}
+            <path
+              d="M22 14C14 14 10 6 4 8"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            {/* Arrowhead - two lines forming a V */}
+            <path
+              d="M7 4L3 8L7 12"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span
+            className="-rotate-2 text-lg text-muted"
+            style={{ fontFamily: 'var(--font-caveat)', lineHeight: 1 }}
+          >
+            click to send a message!
+          </span>
+        </motion.div>
+
+        {/* Scribble annotation - Desktop */}
         <motion.div
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}

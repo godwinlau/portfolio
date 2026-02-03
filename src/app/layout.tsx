@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { polySans, polySansMono, libreBaskerville, caveat } from '@/lib/fonts';
-import { ThemeToggle } from '@/components/ThemeToggle';
 import { FontToggle } from '@/components/FontToggle';
 import { FontProvider } from '@/components/FontProvider';
 import { ContactModalProvider, ContactModal } from '@/components/ContactModal';
@@ -74,9 +73,6 @@ export default function RootLayout({
             {children}
             <ContactModal />
             <FontToggle />
-            <div className="fixed bottom-6 right-6 z-50">
-              <ThemeToggle />
-            </div>
           </ContactModalProvider>
         </FontProvider>
       </body>
