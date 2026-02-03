@@ -7,3 +7,4 @@ export { ProjectCard } from './ProjectCard';
 export { ProjectRow } from './ProjectRow';
 export { ScrambleText } from './ScrambleText';
 export { LetterStagger } from './LetterStagger';
+export { Polaroid } from './Polaroid';

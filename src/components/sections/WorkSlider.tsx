@@ -8,8 +8,8 @@ import { projects } from '@/data/projects';
 export function WorkSlider() {
   const [isPaused, setIsPaused] = useState(false);
 
-  // Duplicate projects for seamless loop
-  const duplicatedProjects = [...projects, ...projects];
+  // Duplicate projects for seamless loop on large screens
+  const duplicatedProjects = [...projects, ...projects, ...projects, ...projects];
 
   return (
     <section className="py-16 md:py-20 overflow-hidden">

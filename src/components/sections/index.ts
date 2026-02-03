@@ -3,4 +3,5 @@ export { WorkSlider } from './WorkSlider';
 export { CaseStudies } from './CaseStudies';
 export { StackGrid } from './StackGrid';
 export { About } from './About';
+export { BlogPreview } from './BlogPreview';
 export { ChatCTA } from './ChatCTA';
