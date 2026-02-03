@@ -30,7 +30,7 @@ export function StackGrid() {
         >
           {skillCategories.map((category) => (
             <div key={category.title}>
-              <p className="mb-4 text-sm font-medium uppercase tracking-wide text-muted">
+              <p className="mb-4 text-xs font-medium uppercase tracking-wide text-muted">
                 {category.title}
               </p>
               <ul className="grid grid-cols-2 gap-3 md:grid-cols-1">

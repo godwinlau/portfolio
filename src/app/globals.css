@@ -60,6 +60,7 @@
   --muted: #737373;
   --accent: var(--primary);
   --bubble: #f4f4f5;
+  --bubble-chat: #e4e4e7;
   --border: #e4e4e7;
 }
 
@@ -71,7 +72,8 @@
   --text: #fafafa;
   --muted: #a3a3a3;
   --accent: var(--primary);
-  --bubble: #1c1c1c;
+  --bubble: #131313;
+  --bubble-chat: #1c1c1c;
   --border: #262626;
 }
 
@@ -82,7 +84,8 @@
     --text: #fafafa;
     --muted: #a3a3a3;
     --accent: var(--primary);
-    --bubble: #1c1c1c;
+    --bubble: #131313;
+    --bubble-chat: #1c1c1c;
     --border: #262626;
   }
 }
@@ -98,6 +101,7 @@
   --color-muted: var(--muted);
   --color-accent: var(--accent);
   --color-bubble: var(--bubble);
+  --color-bubble-chat: var(--bubble-chat);
   --color-border: var(--border);
 
   /* Font Sizes - Maps to text-h1, text-h2, etc. */

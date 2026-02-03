@@ -145,7 +145,7 @@ function TypingIndicator({ isGodwin }: { isGodwin: boolean }) {
       {isGodwin ? <GodwinAvatar /> : <ViewerAvatar />}
       <div
         className={`rounded-2xl px-4 py-3 ${
-          isGodwin ? 'rounded-tl-sm bg-bubble' : 'rounded-tr-sm bg-accent'
+          isGodwin ? 'rounded-tl-sm bg-bubble-chat' : 'rounded-tr-sm bg-accent'
         }`}
       >
         <div className="flex items-center gap-1">
@@ -190,7 +190,7 @@ function ChatBubble({ message }: { message: ConversationNode }) {
         <div
           className={`rounded-2xl px-4 py-3 ${
             isGodwin
-              ? 'rounded-tl-sm bg-bubble text-text'
+              ? 'rounded-tl-sm bg-bubble-chat text-text'
               : 'rounded-tr-sm bg-accent text-white'
           }`}
         >
@@ -216,7 +216,7 @@ function QuickReplies({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.3 }}
-      className="ml-13 flex flex-wrap gap-2 pl-[52px]"
+      className="flex flex-row flex-wrap gap-2 pl-[52px]"
     >
       {replies.map((reply) => (
         <motion.button
@@ -225,10 +225,10 @@ function QuickReplies({
           disabled={disabled}
           whileHover={{ scale: disabled ? 1 : 1.02 }}
           whileTap={{ scale: disabled ? 1 : 0.98 }}
-          className={`rounded-full border border-accent/30 bg-white px-4 py-2 text-sm text-accent transition-all ${
+          className={`rounded-full border border-accent/30 px-4 py-2 text-sm text-text transition-all ${
             disabled
               ? 'cursor-not-allowed opacity-50'
-              : 'hover:border-accent hover:bg-accent/5'
+              : 'hover:border-accent hover:bg-accent/10'
           }`}
         >
           {reply.label}
@@ -240,7 +240,7 @@ function QuickReplies({
 
 export function ChatCTA() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [visibleMessages, setVisibleMessages] = useState<ConversationNode[]>([]);
   const [currentReplies, setCurrentReplies] = useState<QuickReply[] | null>(null);
   const [isTyping, setIsTyping] = useState<'godwin' | 'viewer' | null>(null);
@@ -248,10 +248,15 @@ export function ChatCTA() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
 
-  // Scroll to bottom when new messages appear
+  // Scroll to bottom within container when new messages appear
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [visibleMessages, isTyping, currentReplies, showCTA]);
+    if (hasStarted && scrollContainerRef.current) {
+      scrollContainerRef.current.scrollTo({
+        top: scrollContainerRef.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, [visibleMessages, isTyping, currentReplies, showCTA, hasStarted]);
 
   const showMessagesSequentially = useCallback(
     async (nodes: ConversationNode[], startIndex = 0) => {
@@ -338,7 +343,7 @@ export function ChatCTA() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={hasStarted ? { opacity: 1, scale: 1 } : {}}
             transition={{ duration: 0.4 }}
-            className="mb-6 flex h-12 w-12 items-center justify-center rounded-full bg-bubble"
+            className="mb-6 flex h-12 w-12 items-center justify-center rounded-lg border border-border p-3"
           >
             <ChatCircle size={24} weight="bold" className="text-accent" />
           </motion.div>
@@ -357,8 +362,8 @@ export function ChatCTA() {
           </motion.h2>
 
           {/* Chat messages - fixed height container */}
-          <div className="mb-6 w-full max-w-[420px] overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm">
-            <div className="h-[320px] overflow-y-auto p-4">
+          <div className="mb-6 w-full max-w-[420px] overflow-hidden rounded-2xl border border-border bg-bubble shadow-sm">
+            <div ref={scrollContainerRef} className="h-[400px] overflow-y-auto px-4 py-6">
               <div className="flex flex-col gap-4">
                 <AnimatePresence mode="sync">
                   {visibleMessages.map((message) => (
@@ -381,8 +386,6 @@ export function ChatCTA() {
                     />
                   )}
                 </AnimatePresence>
-
-                <div ref={messagesEndRef} />
               </div>
             </div>
           </div>
