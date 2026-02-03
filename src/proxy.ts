@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export default function proxy(request: NextRequest) {
+export function proxy(request: NextRequest) {
   const isAuthenticated = request.cookies.get('site-auth')?.value === 'authenticated';
   const isPasswordPage = request.nextUrl.pathname === '/password';
   const isApiRoute = request.nextUrl.pathname.startsWith('/api');
