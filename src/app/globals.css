@@ -223,7 +223,13 @@ small {
 }
 
 .animate-marquee {
-  animation: marquee 40s linear infinite;
+  animation: marquee 20s linear infinite;
+}
+
+@media (min-width: 768px) {
+  .animate-marquee {
+    animation: marquee 40s linear infinite;
+  }
 }
 
 /* Wide dashed border */
