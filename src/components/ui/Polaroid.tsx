@@ -114,7 +114,7 @@ export function Polaroid({
   return (
     <div className={`relative ${className}`}>
       <div
-        className={`rounded bg-bubble shadow-lg dark:border dark:border-border dark:shadow-none ${sizeClass.padding} ${rotate}`}
+        className={`rounded bg-bubble shadow-[0_4px_20px_rgba(0,0,0,0.15)] dark:border dark:border-border dark:shadow-none ${sizeClass.padding} ${rotate}`}
         style={{ paddingBottom: label ? '1.75rem' : '0.75rem' }}
       >
         <div className="overflow-hidden rounded-sm">
