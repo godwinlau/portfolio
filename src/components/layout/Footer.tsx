@@ -1,7 +1,11 @@
+'use client';
+
 import Link from 'next/link';
 import { socialLinks, email } from '@/data/socials';
+import { useContactModal } from '@/components/ContactModal';
 
 export function Footer() {
+  const { openModal } = useContactModal();
   const currentYear = new Date().getFullYear();
 
   return (
@@ -13,12 +17,12 @@ export function Footer() {
             <p className="text-sm text-muted">
               Open to remote roles and select projects.
             </p>
-            <a
-              href={`mailto:${email}`}
+            <button
+              onClick={openModal}
               className="font-serif text-2xl transition-colors hover:text-accent md:text-3xl"
             >
               {email}
-            </a>
+            </button>
           </div>
 
           {/* Right side - Social links */}

@@ -1,8 +1,9 @@
 import type { Metadata } from 'next';
-import { polySans, polySansMono, libreBaskerville } from '@/lib/fonts';
+import { polySans, polySansMono, libreBaskerville, caveat } from '@/lib/fonts';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { FontToggle } from '@/components/FontToggle';
 import { FontProvider } from '@/components/FontProvider';
+import { ContactModalProvider, ContactModal } from '@/components/ContactModal';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -65,15 +66,18 @@ export default function RootLayout({
         <script dangerouslySetInnerHTML={{ __html: initScript }} />
       </head>
       <body
-        className={`${polySans.variable} ${polySansMono.variable} ${libreBaskerville.variable} antialiased`}
+        className={`${polySans.variable} ${polySansMono.variable} ${libreBaskerville.variable} ${caveat.variable} antialiased`}
       >
         <FontProvider>
-          <div className="noise-overlay" aria-hidden="true" />
-          {children}
-          <FontToggle />
-          <div className="fixed bottom-6 right-6 z-50">
-            <ThemeToggle />
-          </div>
+          <ContactModalProvider>
+            <div className="noise-overlay" aria-hidden="true" />
+            {children}
+            <ContactModal />
+            <FontToggle />
+            <div className="fixed bottom-6 right-6 z-50">
+              <ThemeToggle />
+            </div>
+          </ContactModalProvider>
         </FontProvider>
       </body>
     </html>

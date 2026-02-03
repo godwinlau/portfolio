@@ -2,9 +2,8 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
-import { useRef, useState, useEffect, useCallback } from 'react';
-import { ChatCircle } from '@phosphor-icons/react';
-import { ArrowLink } from '@/components/ui';
+import { useRef, useState, useEffect, useCallback, FormEvent } from 'react';
+import { ChatCircle, PaperPlaneTilt, CircleNotch, CheckCircle, DownloadSimple } from '@phosphor-icons/react';
 
 // Types for the conversation flow
 type QuickReply = {
@@ -19,6 +18,7 @@ type ConversationNode = {
   text: string;
   quickReplies?: QuickReply[];
   showCTA?: boolean;
+  showCV?: boolean;
 };
 
 // Conversation flow data - easy to extend with more FAQs later
@@ -27,11 +27,12 @@ const conversationFlow: Record<string, ConversationNode[]> = {
     {
       id: 'intro',
       sender: 'godwin',
-      text: "Hey! How was viewing some of my work? Have a project in mind you'd like to succeed as well?",
+      text: "Hey! Got a project in mind or just exploring?",
       quickReplies: [
         { id: 'project-yes', label: "Yes, let's talk!", nextNode: 'project' },
         { id: 'process', label: 'What\'s your process?', nextNode: 'faq-process' },
         { id: 'availability', label: 'Are you available?', nextNode: 'faq-availability' },
+        { id: 'hiring', label: "I'm hiring", nextNode: 'hiring-manager' },
       ],
     },
   ],
@@ -107,6 +108,48 @@ const conversationFlow: Record<string, ConversationNode[]> = {
       id: 'project-faq-reply',
       sender: 'godwin',
       text: "Love that energy! Send me a message and let's bring your idea to life.",
+      showCTA: true,
+    },
+  ],
+  'hiring-manager': [
+    {
+      id: 'hiring-response',
+      sender: 'viewer',
+      text: "I'm looking to hire a developer for our team.",
+    },
+    {
+      id: 'hiring-reply',
+      sender: 'godwin',
+      text: "Nice! Tell me more about what you're building.",
+      quickReplies: [
+        { id: 'request-cv', label: 'Send me your CV', nextNode: 'cv-request' },
+        { id: 'hiring-chat', label: "Let's chat", nextNode: 'hiring-contact' },
+      ],
+    },
+  ],
+  'cv-request': [
+    {
+      id: 'cv-response',
+      sender: 'viewer',
+      text: 'Can you send me your CV?',
+    },
+    {
+      id: 'cv-reply',
+      sender: 'godwin',
+      text: "Sure thing! Here you go.",
+      showCV: true,
+    },
+  ],
+  'hiring-contact': [
+    {
+      id: 'hiring-contact-response',
+      sender: 'viewer',
+      text: "I'd like to discuss an opportunity with you.",
+    },
+    {
+      id: 'hiring-contact-reply',
+      sender: 'godwin',
+      text: "Sounds good. Drop me a message with some details.",
       showCTA: true,
     },
   ],
@@ -238,13 +281,183 @@ function QuickReplies({
   );
 }
 
+function ChatContactForm({ onSubmit }: { onSubmit: (data: { name: string; email: string; message: string }) => void }) {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    message: '',
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState(false);
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    setError(false);
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      if (response.ok) {
+        onSubmit(formData);
+      } else {
+        setError(true);
+      }
+    } catch {
+      setError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
+  };
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="flex flex-row-reverse items-start gap-3"
+    >
+      <ViewerAvatar />
+      <form onSubmit={handleSubmit} className="flex flex-1 flex-col gap-3">
+        <input
+          type="text"
+          name="name"
+          value={formData.name}
+          onChange={handleChange}
+          required
+          placeholder="Your name"
+          className="w-full rounded-xl border border-border bg-bg px-3 py-2.5 text-sm text-text placeholder:text-muted/50 focus:border-accent focus:outline-none"
+        />
+        <input
+          type="email"
+          name="email"
+          value={formData.email}
+          onChange={handleChange}
+          required
+          placeholder="your@email.com"
+          className="w-full rounded-xl border border-border bg-bg px-3 py-2.5 text-sm text-text placeholder:text-muted/50 focus:border-accent focus:outline-none"
+        />
+        <textarea
+          name="message"
+          value={formData.message}
+          onChange={handleChange}
+          required
+          rows={3}
+          placeholder="Tell me about your project..."
+          className="w-full resize-none rounded-xl border border-border bg-bg px-3 py-2.5 text-sm text-text placeholder:text-muted/50 focus:border-accent focus:outline-none"
+        />
+        <button
+          type="submit"
+          disabled={isSubmitting}
+          className="flex items-center justify-center gap-2 rounded-full bg-accent px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-accent/90 disabled:cursor-not-allowed disabled:opacity-70"
+        >
+          {isSubmitting ? (
+            <>
+              <CircleNotch size={16} weight="bold" className="animate-spin" />
+              Sending...
+            </>
+          ) : (
+            <>
+              <PaperPlaneTilt size={16} weight="bold" />
+              Send message
+            </>
+          )}
+        </button>
+        {error && (
+          <p className="text-center text-xs text-red-500">
+            Something went wrong. Please try again.
+          </p>
+        )}
+      </form>
+    </motion.div>
+  );
+}
+
+function SentMessageBubble({ name, message }: { name: string; message: string }) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="flex flex-row-reverse items-start gap-3"
+    >
+      <ViewerAvatar />
+      <div className="flex max-w-[280px] flex-col items-end gap-1">
+        <div className="rounded-2xl rounded-tr-sm bg-accent px-4 py-3 text-white">
+          <p className="mb-1 text-xs opacity-70">From: {name}</p>
+          <p className="text-sm leading-relaxed">{message}</p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function ThankYouBubble() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.4, ease: [0.25, 0.46, 0.45, 0.94] }}
+      className="flex items-start gap-3"
+    >
+      <GodwinAvatar />
+      <div className="flex max-w-[280px] flex-col gap-1">
+        <div className="rounded-2xl rounded-tl-sm bg-bubble-chat px-4 py-3 text-text">
+          <div className="mb-1 flex items-center gap-1.5 text-accent">
+            <CheckCircle size={16} weight="bold" />
+            <span className="text-xs font-medium">Message received!</span>
+          </div>
+          <p className="text-sm leading-relaxed">
+            Thanks for reaching out! I'll get back to you as soon as I can.
+          </p>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+function CVDownloadButton() {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+      className="pl-[52px]"
+    >
+      <a
+        href="/godwin/Godwin_Laureto_CV.pdf"
+        download
+        className="inline-flex items-center gap-2 rounded-full bg-accent px-4 py-2.5 text-sm font-medium text-white transition-all hover:bg-accent/90"
+      >
+        <DownloadSimple size={16} weight="bold" />
+        Download CV
+      </a>
+    </motion.div>
+  );
+}
+
 export function ChatCTA() {
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [visibleMessages, setVisibleMessages] = useState<ConversationNode[]>([]);
   const [currentReplies, setCurrentReplies] = useState<QuickReply[] | null>(null);
   const [isTyping, setIsTyping] = useState<'godwin' | 'viewer' | null>(null);
-  const [showCTA, setShowCTA] = useState(false);
+  const [showContactForm, setShowContactForm] = useState(false);
+  const [sentMessage, setSentMessage] = useState<{ name: string; message: string } | null>(null);
+  const [isReplyTyping, setIsReplyTyping] = useState(false);
+  const [showThankYou, setShowThankYou] = useState(false);
+  const [showCVDownload, setShowCVDownload] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
   const [hasStarted, setHasStarted] = useState(false);
 
@@ -256,7 +469,20 @@ export function ChatCTA() {
         behavior: 'smooth',
       });
     }
-  }, [visibleMessages, isTyping, currentReplies, showCTA, hasStarted]);
+  }, [visibleMessages, isTyping, currentReplies, showContactForm, showCVDownload, sentMessage, isReplyTyping, showThankYou, hasStarted]);
+
+  const handleFormSubmit = async (data: { name: string; email: string; message: string }) => {
+    // Hide form and show the sent message
+    setShowContactForm(false);
+    setSentMessage({ name: data.name, message: data.message });
+
+    // After a delay, show typing indicator then thank you message
+    await new Promise((r) => setTimeout(r, 600));
+    setIsReplyTyping(true);
+    await new Promise((r) => setTimeout(r, 1000 + Math.random() * 500));
+    setIsReplyTyping(false);
+    setShowThankYou(true);
+  };
 
   const showMessagesSequentially = useCallback(
     async (nodes: ConversationNode[], startIndex = 0) => {
@@ -279,10 +505,18 @@ export function ChatCTA() {
           return; // Wait for user interaction
         }
 
-        // If this message should show CTA
+        // If this message should show the contact form
         if (node.showCTA) {
           await new Promise((r) => setTimeout(r, 400));
-          setShowCTA(true);
+          setShowContactForm(true);
+          setIsProcessing(false);
+          return;
+        }
+
+        // If this message should show the CV download
+        if (node.showCV) {
+          await new Promise((r) => setTimeout(r, 400));
+          setShowCVDownload(true);
           setIsProcessing(false);
           return;
         }
@@ -362,12 +596,12 @@ export function ChatCTA() {
           </motion.h2>
 
           {/* Chat messages - fixed height container */}
-          <div className="mb-6 w-full max-w-[420px] overflow-hidden rounded-2xl border border-border bg-bubble shadow-sm">
-            <div ref={scrollContainerRef} className="h-[400px] overflow-y-auto px-4 py-6">
+          <div className="w-full max-w-[420px] overflow-hidden rounded-2xl border border-border bg-bubble shadow-sm">
+            <div ref={scrollContainerRef} className="h-[480px] overflow-y-auto px-4 py-6">
               <div className="flex flex-col gap-4">
                 <AnimatePresence mode="sync">
-                  {visibleMessages.map((message) => (
-                    <ChatBubble key={message.id} message={message} />
+                  {visibleMessages.map((message, index) => (
+                    <ChatBubble key={`${message.id}-${index}`} message={message} />
                   ))}
 
                   {isTyping && (
@@ -386,28 +620,47 @@ export function ChatCTA() {
                     />
                   )}
                 </AnimatePresence>
+
+                {/* Contact form inside chat */}
+                <AnimatePresence>
+                  {showContactForm && (
+                    <ChatContactForm
+                      key="contact-form"
+                      onSubmit={handleFormSubmit}
+                    />
+                  )}
+                </AnimatePresence>
+
+                {/* CV download button */}
+                <AnimatePresence>
+                  {showCVDownload && <CVDownloadButton key="cv-download" />}
+                </AnimatePresence>
+
+                {/* Sent message bubble */}
+                <AnimatePresence>
+                  {sentMessage && (
+                    <SentMessageBubble
+                      key="sent-message"
+                      name={sentMessage.name}
+                      message={sentMessage.message}
+                    />
+                  )}
+                </AnimatePresence>
+
+                {/* Typing indicator for reply (after sent message) */}
+                <AnimatePresence>
+                  {isReplyTyping && (
+                    <TypingIndicator key="reply-typing" isGodwin={true} />
+                  )}
+                </AnimatePresence>
+
+                {/* Thank you reply from Godwin */}
+                <AnimatePresence>
+                  {showThankYou && <ThankYouBubble key="thank-you" />}
+                </AnimatePresence>
               </div>
             </div>
           </div>
-
-          {/* CTA Button */}
-          <AnimatePresence>
-            {showCTA && (
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, ease: 'easeOut' }}
-              >
-                <ArrowLink
-                  href="mailto:hello@godwinlaureto.com"
-                  variant="pill-light"
-                  external
-                >
-                  hello@godwinlaureto.com
-                </ArrowLink>
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
       </div>
     </section>

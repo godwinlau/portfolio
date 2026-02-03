@@ -1,5 +1,5 @@
 import localFont from 'next/font/local';
-import { Libre_Baskerville } from 'next/font/google';
+import { Libre_Baskerville, Caveat } from 'next/font/google';
 
 // PolySans for body text (Neutral/Regular weight)
 export const polySans = localFont({
@@ -90,5 +90,13 @@ export const libreBaskerville = Libre_Baskerville({
   subsets: ['latin'],
   weight: ['400', '700'],
   variable: '--font-libre-baskerville',
+  display: 'swap',
+});
+
+// Caveat for handwriting/scribble style
+export const caveat = Caveat({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-caveat',
   display: 'swap',
 });

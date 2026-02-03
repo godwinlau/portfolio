@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { email } from '@/data/socials';
+import { useContactModal } from '@/components/ContactModal';
 
 export function Header() {
+  const { openModal } = useContactModal();
+
   return (
     <motion.header
       initial={{ opacity: 0, y: -20 }}
@@ -29,12 +31,12 @@ export function Header() {
             className="h-auto w-[100px]"
           />
         </Link>
-        <a
-          href={`mailto:${email}`}
+        <button
+          onClick={openModal}
           className="text-base font-medium text-muted transition-colors hover:text-accent"
         >
           Contact
-        </a>
+        </button>
       </div>
     </motion.header>
   );

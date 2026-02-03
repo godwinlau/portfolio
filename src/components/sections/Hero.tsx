@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
-import { ChatBubble, ArrowLink } from '@/components/ui';
+import { ChatBubble, ContactButton } from '@/components/ui';
 import { email } from '@/data/socials';
 import { StarFour } from '@phosphor-icons/react';
 
@@ -85,11 +85,50 @@ export function Hero() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 1.2 }}
-        className="mt-6"
+        className="mt-6 flex items-center gap-4"
       >
-        <ArrowLink href={`mailto:${email}`} variant="pill-light" external>
+        <ContactButton variant="pill-light">
           {email}
-        </ArrowLink>
+        </ContactButton>
+
+        {/* Scribble annotation */}
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.4, delay: 1.6 }}
+          className="hidden items-center gap-1 md:flex"
+        >
+          {/* Hand-drawn arrow pointing left towards button */}
+          <svg
+            width="40"
+            height="20"
+            viewBox="0 0 40 20"
+            fill="none"
+            className="text-muted"
+          >
+            {/* Curved line */}
+            <path
+              d="M38 16C28 16 24 4 14 4C10 4 6 6 4 10"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+            />
+            {/* Arrowhead */}
+            <path
+              d="M8 4L4 10L10 12"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <span
+            className="-rotate-2 text-lg text-muted"
+            style={{ fontFamily: 'var(--font-caveat)' }}
+          >
+            click to send a message!
+          </span>
+        </motion.div>
       </motion.div>
 
       {/* Chat Bubble Bio */}

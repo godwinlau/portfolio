@@ -2,6 +2,7 @@ export { Avatar } from './Avatar';
 export { ChatBubble } from './ChatBubble';
 export { Tag } from './Tag';
 export { ArrowLink } from './ArrowLink';
+export { ContactButton } from './ContactButton';
 export { SectionHeader } from './SectionHeader';
 export { ProjectCard } from './ProjectCard';
 export { ProjectRow } from './ProjectRow';
