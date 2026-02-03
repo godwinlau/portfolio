@@ -3,6 +3,9 @@ import { polySans, polySansMono, libreBaskerville } from '@/lib/fonts';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { FontToggle } from '@/components/FontToggle';
 import { FontProvider } from '@/components/FontProvider';
+import { LoadingProvider } from '@/components/LoadingContext';
+import { LoadingScreen } from '@/components/LoadingScreen';
+import { AnimatedLogo } from '@/components/AnimatedLogo';
 import './globals.css';
 
 export const metadata: Metadata = {
@@ -68,12 +71,16 @@ export default function RootLayout({
         className={`${polySans.variable} ${polySansMono.variable} ${libreBaskerville.variable} antialiased`}
       >
         <FontProvider>
-          <div className="noise-overlay" aria-hidden="true" />
-          {children}
-          <FontToggle />
-          <div className="fixed bottom-6 right-6 z-50">
-            <ThemeToggle />
-          </div>
+          <LoadingProvider>
+            <LoadingScreen />
+            <AnimatedLogo />
+            <div className="noise-overlay" aria-hidden="true" />
+            {children}
+            <FontToggle />
+            <div className="fixed bottom-6 right-6 z-50">
+              <ThemeToggle />
+            </div>
+          </LoadingProvider>
         </FontProvider>
       </body>
     </html>

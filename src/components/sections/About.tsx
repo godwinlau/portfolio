@@ -26,12 +26,13 @@ export function About() {
               scribblePosition="top-left"
             />
             <Polaroid
-              src="/projects/blaze2b.png"
+              src="/godwin/IMG_3025.jpeg"
               alt="Work"
               rotate="rotate-3"
               label="building stuff"
               scribble="star"
               scribblePosition="top-right"
+              objectPosition="bottom"
             />
           </motion.div>
 

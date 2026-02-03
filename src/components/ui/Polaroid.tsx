@@ -75,6 +75,7 @@ interface PolaroidProps {
   scribblePosition?: ScribblePosition;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
+  objectPosition?: string;
 }
 
 const sizeClasses = {
@@ -108,6 +109,7 @@ export function Polaroid({
   scribblePosition = 'top-right',
   size = 'md',
   className = '',
+  objectPosition = 'center',
 }: PolaroidProps) {
   const sizeClass = sizeClasses[size];
 
@@ -124,6 +126,7 @@ export function Polaroid({
             width={220}
             height={220}
             className={`rounded-sm object-cover shadow-sm ${sizeClass.image}`}
+            style={{ objectPosition }}
           />
         </div>
         {label && (
