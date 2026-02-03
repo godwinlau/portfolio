@@ -16,7 +16,7 @@ function ProjectBento({ project, index }: { project: typeof projects[0]; index: 
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: 0.1 }}
     >
-      <Link href={project.link} className="block">
+      <Link href={project.link || `/work/${project.slug}`} className="block">
         <div className={`grid grid-cols-1 gap-3 md:grid-cols-3 md:gap-4 ${isEven ? '' : 'md:direction-rtl'}`}>
           {/* Large box - main image */}
           <div className={`md:col-span-2 ${!isEven ? 'md:order-2' : ''}`}>
