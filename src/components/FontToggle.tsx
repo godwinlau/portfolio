@@ -9,7 +9,7 @@ export function FontToggle() {
   const { resolvedTheme, toggleTheme } = useTheme();
 
   return (
-    <div className="fixed left-4 top-1/2 z-50 flex -translate-y-1/2 flex-col gap-1 rounded-lg border border-border bg-bg/80 p-1.5 backdrop-blur-md">
+    <div className="fixed bottom-6 left-4 z-50 flex flex-col gap-1 rounded-lg border border-border bg-bg/80 p-1.5 backdrop-blur-md md:bottom-auto md:top-1/2 md:-translate-y-1/2">
       <button
         onClick={() => setFont('sans')}
         className={`flex h-9 w-9 items-center justify-center rounded-md transition-colors ${
